@@ -49,7 +49,6 @@ impl Issuer {
     }
 
     pub fn revoke_credential(&self) -> VcxResult<()> {
-        println!("REVOKING CREDENTIAL FOR ARIES!");
         self.issuer_sm.revoke()
     }
 
