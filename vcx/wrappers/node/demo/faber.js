@@ -11,6 +11,7 @@ const logger = require('./logger')
 const url = require('url')
 const isPortReachable = require('is-port-reachable')
 const { runScript } = require('./script-comon')
+const { vcxUpdateWebhookUrl } = require('./../dist/src/api/utils')
 
 const utime = Math.floor(new Date() / 1000)
 const optionalWebhook = 'http://localhost:7209/notifications/faber'
@@ -61,6 +62,10 @@ async function runFaber (options) {
 
   logger.info(`#2 Using following agent provision to initialize VCX ${JSON.stringify(agentProvision, null, 2)}`)
   await demoCommon.initVcxWithProvisionedAgentConfig(agentProvision)
+
+  // update webhook url
+  if (provisionConfig.webhook_url)
+    await vcxUpdateWebhookUrl({webhookUrl: provisionConfig.webhook_url})
 
   const version = `${getRandomInt(1, 101)}.${getRandomInt(1, 101)}.${getRandomInt(1, 101)}`
   const schemaData = {
