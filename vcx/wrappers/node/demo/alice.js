@@ -15,7 +15,7 @@ const utime = Math.floor(new Date() / 1000)
 const optionalWebhook = 'http://localhost:7209/notifications/alice'
 
 const provisionConfig = {
-  agency_url: 'http://localhost:8080',
+  agency_url: 'http://15.165.161.165:8080',
   agency_did: 'VsKV7grR1BUE29mG2Fm2kX',
   agency_verkey: 'Hezce2UWMZ3wUhVkh2LfKSs8nDzWwzs2Win7EzNN3YaR',
   wallet_name: `node_vcx_demo_alice_wallet_${utime}`,
