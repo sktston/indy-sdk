@@ -9,12 +9,13 @@ const logger = require('./logger')
 const url = require('url')
 const isPortReachable = require('is-port-reachable')
 const { runScript } = require('./script-comon')
+const { vcxUpdateWebhookUrl } = require('./../dist/src/api/utils')
 
 const utime = Math.floor(new Date() / 1000)
 const optionalWebhook = 'http://localhost:7209/notifications/alice'
 
 const provisionConfig = {
-  agency_url: 'http://localhost:8080',
+  agency_url: 'http://15.165.161.165:8080',
   agency_did: 'VsKV7grR1BUE29mG2Fm2kX',
   agency_verkey: 'Hezce2UWMZ3wUhVkh2LfKSs8nDzWwzs2Win7EzNN3YaR',
   wallet_name: `node_vcx_demo_alice_wallet_${utime}`,
@@ -58,6 +59,10 @@ async function runAlice (options) {
   logger.info('#9 Initialize libvcx with new configuration')
   await demoCommon.initVcxWithProvisionedAgentConfig(config)
 
+  // update webhook url
+  if (provisionConfig.webhook_url)
+    await vcxUpdateWebhookUrl({webhookUrl: provisionConfig.webhook_url})
+
   logger.info('Input faber.py invitation details')
   const details = readlineSync.question('Enter your invite details: ')
   const jdetails = JSON.parse(details)
@@ -93,8 +98,11 @@ async function runAlice (options) {
   }
 
   logger.info('#22 Poll agency for a proof request')
-  const requests = await DisclosedProof.getRequests(connectionToFaber)
-
+  let requests = await DisclosedProof.getRequests(connectionToFaber)
+  while (requests.length === 0) {
+    await sleepPromise(2000)
+    requests = await DisclosedProof.getRequests(connectionToFaber)
+  }
   logger.info('#23 Create a Disclosed proof object from proof request')
   const proof = await DisclosedProof.create({ sourceId: 'proof', request: JSON.stringify(requests[0]) })
 
@@ -107,6 +115,7 @@ async function runAlice (options) {
     credentials.attrs[attr] = {
       credential: credentials.attrs[attr][0]
     }
+    credentials.attrs[attr].tails_file = '/tmp/tails'
   }
 
   logger.info('#25 Generate the proof')
@@ -115,13 +124,14 @@ async function runAlice (options) {
   logger.info('#26 Send the proof to faber')
   await proof.sendProof(connectionToFaber)
 
+  logger.info('#27 Wait for Faber to receive the proof')
   let proofState = await proof.getState()
-  while (proofState !== StateType.Accepted) {
+  while (proofState !== StateType.Accepted && proofState !== StateType.None) {
     await sleepPromise(2000)
     await proof.updateState()
     proofState = await proof.getState()
   }
-  logger.info('Proof is verified.')
+  logger.info('Faber received the proof')
   process.exit(0)
 }
 

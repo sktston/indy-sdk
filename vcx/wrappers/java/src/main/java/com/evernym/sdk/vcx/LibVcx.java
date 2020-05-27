@@ -25,7 +25,7 @@ public abstract class LibVcx {
         public String vcx_error_c_message(int error_code);
         public String vcx_version();
         public int vcx_shutdown(boolean delete);
-        public int vcx_reset();
+        public int vcx_update_institution_info(String name, String logo_url);
         public int vcx_update_webhook_url(int command_handle, String notification_webhook_url, Callback cb);
 
     /**
@@ -300,6 +300,8 @@ public abstract class LibVcx {
         /** Sets the credential request in an accepted state. (not in MVP) */
         public int vcx_issuer_accept_credential(int credential_handle);
 
+        /** Revokes credential. */
+        public int vcx_issuer_revoke_credential(int command_handle, int credential_handle, Callback cb);
 
     /**
      * proof object
@@ -375,11 +377,6 @@ public abstract class LibVcx {
      */
 
         /**
-         * Creates a disclosed_proof object.  Populates a handle to the new disclosed_proof.
-         */
-        public int vcx_disclosed_proof_create_with_request(int command_handle, String source_id, String requested_attrs, String requested_predicates, String name, Callback cb);
-
-        /**
          * Create a proof object with proof request
          */
         public int vcx_disclosed_proof_create_with_request(int command_handle, String source_id, String proof_req, Callback cb);
@@ -408,6 +405,12 @@ public abstract class LibVcx {
          * Populates status with the current State of this disclosed_proof request.
          */
         public int vcx_disclosed_proof_update_state(int command_handle, int proof_handle, Callback cb);
+
+        /**
+         * Populates status of the proof from the given message.
+         */
+        public int vcx_disclosed_proof_update_state_with_message(int command_handle, int proof_handle, String message, Callback cb);
+
 
         /**
          * Check for any proof requests from the connection.
@@ -520,6 +523,9 @@ public abstract class LibVcx {
 
         /** Retrieve information about a stored credential in user's wallet, including credential id and the credential itself. */
         public int vcx_get_credential(int command_handle, int credential_handle, Callback cb);
+
+        /** Delete a credential from the wallet and release it from memory. */
+        public int vcx_delete_credential(int command_handle, int credential_handle, Callback cb);
 
         /**
          * wallet object

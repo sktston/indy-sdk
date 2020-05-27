@@ -11,12 +11,13 @@ const logger = require('./logger')
 const url = require('url')
 const isPortReachable = require('is-port-reachable')
 const { runScript } = require('./script-comon')
+const { vcxUpdateWebhookUrl } = require('./../dist/src/api/utils')
 
 const utime = Math.floor(new Date() / 1000)
 const optionalWebhook = 'http://localhost:7209/notifications/faber'
 
 const provisionConfig = {
-  agency_url: 'http://localhost:8080',
+  agency_url: 'http://15.165.161.165:8080',
   agency_did: 'VsKV7grR1BUE29mG2Fm2kX',
   agency_verkey: 'Hezce2UWMZ3wUhVkh2LfKSs8nDzWwzs2Win7EzNN3YaR',
   wallet_name: `node_vcx_demo_faber_wallet_${utime}`,
@@ -62,6 +63,10 @@ async function runFaber (options) {
   logger.info(`#2 Using following agent provision to initialize VCX ${JSON.stringify(agentProvision, null, 2)}`)
   await demoCommon.initVcxWithProvisionedAgentConfig(agentProvision)
 
+  // update webhook url
+  if (provisionConfig.webhook_url)
+    await vcxUpdateWebhookUrl({webhookUrl: provisionConfig.webhook_url})
+
   const version = `${getRandomInt(1, 101)}.${getRandomInt(1, 101)}.${getRandomInt(1, 101)}`
   const schemaData = {
     data: {
@@ -82,9 +87,10 @@ async function runFaber (options) {
   const data = {
     name: 'DemoCredential123',
     paymentHandle: 0,
-    revocation: false,
     revocationDetails: {
-      tailsFile: 'tails.txt'
+      supportRevocation: true,
+      tailsFile: '/tmp/tails',
+      maxCreds: 5
     },
     schemaId: schemaId,
     sourceId: 'testCredentialDefSourceId123'
@@ -174,6 +180,10 @@ async function runFaber (options) {
     }
   ]
 
+  if (options.revocation) {
+    logger.info('#18.5 Revoking credential')
+    await credentialForAlice.revokeCredential()
+  }
   const proofPredicates = [
     { name: 'age', p_type: '>=', p_value: 20, restrictions: [{ issuer_did: agentProvision.institution_did }] }
   ]
@@ -192,7 +202,12 @@ async function runFaber (options) {
 
   logger.info('#21 Poll agency and wait for alice to provide proof')
   let proofState = await proof.getState()
+  const revokedState = options.revocation ? StateType.None : StateType.Revoked
   while (proofState !== StateType.Accepted) {
+    if (proofState === revokedState) {
+      logger.info('Alice failed to provide proof, credential revoked')
+      process.exit(0)
+    }
     await sleepPromise(2000)
     await proof.updateState()
     proofState = await proof.getState()
@@ -205,7 +220,7 @@ async function runFaber (options) {
   if (proof.proofState === ProofState.Verified) {
     logger.info('Proof is verified')
   } else {
-    logger.info('Could not verify proof')
+    logger.info('Proof verification failed, credential revoked')
   }
   process.exit(0)
 }
@@ -227,6 +242,12 @@ const optionDefinitions = [
     name: 'postgresql',
     type: Boolean,
     description: 'If specified, postresql wallet will be used.',
+    defaultValue: false
+  },
+  {
+    name: 'revocation',
+    type: Boolean,
+    description: 'If specified, the issued credential will be revoked',
     defaultValue: false
   }
 ]
