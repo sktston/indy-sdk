@@ -60,8 +60,10 @@ impl HolderSM {
 
         match self.find_message_to_handle(messages) {
             Some((uid, msg)) => {
+                let state = self.handle_message(msg.into())?;
                 connection::update_message_status(conn_handle, uid)?;
-                self.handle_message(msg.into())
+                Ok(state)
+
             }
             None => Ok(self)
         }
@@ -119,7 +121,6 @@ impl HolderSM {
                         Ok((cred_request, req_meta, cred_def_json)) => {
                             let cred_request = cred_request
                                 .set_thread_id(&thread_id);
-                            connection::remove_pending_message(connection_handle, &state_data.offer.id)?;
                             connection::send_message(connection_handle, cred_request.to_a2a_message())?;
                             HolderState::RequestSent((state_data, req_meta, cred_def_json, connection_handle).into())
                         }
@@ -201,12 +202,14 @@ impl HolderSM {
     }
 
     pub fn delete_credential(&self) -> VcxResult<()> {
+        trace!("Holder::delete_credential");
+        
         match self.state {
             HolderState::Finished(ref state) => {
-                let cred_id = state.cred_id.clone().ok_or(VcxError::from_msg(VcxErrorKind::InvalidState, "Cannot get credential: Credential Id not found"))?;
+                let cred_id = state.cred_id.clone().ok_or(VcxError::from_msg(VcxErrorKind::InvalidState, "Cannot get credential: credential id not found"))?;
                 _delete_credential(&cred_id)
             }
-            _ => Err(VcxError::from_msg(VcxErrorKind::NotReady, "Cannot delete credential: Credential Issuance is not finished yet"))
+            _ => Err(VcxError::from_msg(VcxErrorKind::NotReady, "Cannot delete credential: credential issuance is not finished yet"))
         }
     }
 }
@@ -256,7 +259,7 @@ fn _store_credential(credential: &Credential,
 }
 
 fn _delete_credential(cred_id: &str) -> VcxResult<()> {
-    trace!("Holder::_delete_credential >>>");
+    trace!("Holder::_delete_credential >>> cred_id: {}", cred_id);
 
     libindy_prover_delete_credential(cred_id)
 }

@@ -17,7 +17,7 @@
     "workers": 2
   },
   "server_admin": {
-    "enabled": false,
+    "enabled": true,
     "addresses": [
       "127.0.0.1:8090"
     ]
