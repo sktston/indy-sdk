@@ -100,7 +100,7 @@ pub struct UpdateComMethod {
     com_method: ComMethod,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum ComMethodType {
     A2A,
     Webhook
@@ -467,28 +467,28 @@ fn update_agent_info_v2(to_did: &str, com_method: ComMethod) -> VcxResult<()> {
 pub fn update_agent_webhook(webhook_url: &str) -> VcxResult<()> {
     trace!("update_agent_webhook >>> webhook_url: {:?}", webhook_url);
 
-    let to_did = settings::get_config_value(settings::CONFIG_REMOTE_TO_SDK_DID)?;
-
     let com_method: ComMethod = ComMethod {
         id: String::from("123"),
         e_type: ComMethodType::Webhook,
         value: String::from(webhook_url)
     };
 
-    match settings::get_protocol_type() {
-        settings::ProtocolTypes::V1 => {
-            update_agent_webhook_v1(&to_did, com_method)
-        }
-        settings::ProtocolTypes::V2 |
-        settings::ProtocolTypes::V3 |
-        settings::ProtocolTypes::V4 => {
-            update_agent_webhook_v2(&to_did, com_method)
-        }
+    match settings::get_config_value(settings::CONFIG_REMOTE_TO_SDK_DID) {
+        Ok(to_did) => {
+            match settings::get_protocol_type() {
+                settings::ProtocolTypes::V1 => update_agent_webhook_v1(&to_did, com_method)?,
+                settings::ProtocolTypes::V2 |
+                settings::ProtocolTypes::V3 |
+                settings::ProtocolTypes::V4 => update_agent_webhook_v2(&to_did, com_method)?,
+            }
+        },
+        Err(e) => warn!("Unable to update webhook (did you provide remote did in the config?): {}", e)
     }
+    Ok(())
 }
 
 fn update_agent_webhook_v1(to_did: &str, com_method: ComMethod) -> VcxResult<()> {
-    AgencyMock::set_next_response(constants::REGISTER_RESPONSE.to_vec());
+    if settings::agency_mocks_enabled() { return Ok(()) }
 
     let message = A2AMessage::Version1(
         A2AMessageV1::UpdateComMethod(UpdateComMethod::build(com_method))
@@ -591,6 +591,18 @@ mod tests {
         });
 
         assert_eq!(expected, ::serde_json::from_str::<serde_json::Value>(&result).unwrap());
+    }
+
+    #[test]
+    fn test_method_type_serialization() {
+        assert_eq!("\"1\"", serde_json::to_string::<ComMethodType>(&ComMethodType::A2A).unwrap());
+        assert_eq!("\"2\"", serde_json::to_string::<ComMethodType>(&ComMethodType::Webhook).unwrap());
+    }
+
+    #[test]
+    fn test_method_type_deserialization() {
+        assert_eq!(ComMethodType::A2A, serde_json::from_str::<ComMethodType>("\"1\"").unwrap());
+        assert_eq!(ComMethodType::Webhook, serde_json::from_str::<ComMethodType>("\"2\"").unwrap());
     }
 
     #[ignore]
