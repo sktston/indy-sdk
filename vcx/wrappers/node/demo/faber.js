@@ -20,7 +20,7 @@ const optionalWebhook = 'http://localhost:7209/notifications/faber'
 const TAA_ACCEPT = process.env.TAA_ACCEPT === 'true' || false
 
 const provisionConfig = {
-  agency_url: 'http://15.165.161.165:8080',
+  agency_url: 'http://127.0.0.1:8080',
   agency_did: 'VsKV7grR1BUE29mG2Fm2kX',
   agency_verkey: 'Hezce2UWMZ3wUhVkh2LfKSs8nDzWwzs2Win7EzNN3YaR',
   wallet_name: `node_vcx_demo_faber_wallet_${utime}`,
@@ -65,10 +65,6 @@ async function runFaber (options) {
 
   logger.info(`#2 Using following agent provision to initialize VCX ${JSON.stringify(agentProvision, null, 2)}`)
   await demoCommon.initVcxWithProvisionedAgentConfig(agentProvision)
-
-  // update webhook url
-  if (provisionConfig.webhook_url)
-    await vcxUpdateWebhookUrl({webhookUrl: provisionConfig.webhook_url})
 
   if (TAA_ACCEPT) {
     logger.info('#2.1 Accept transaction author agreement')
