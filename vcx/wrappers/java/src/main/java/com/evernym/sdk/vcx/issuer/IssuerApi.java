@@ -13,10 +13,10 @@ import java.util.concurrent.CompletableFuture;
 /**
  * <h1>VCX Credential Definition API.</h1>
  * VCX Credential Definition APIs <br>
- * Javadoc written by SKTelecom (The original is vcx and python wrapper documents)
- * @author  JJ
- * @version 1.0
- * @since   09/08/2020
+ * Javadoc as written by JJ (Referring to libvcx and python wrapper documents)
+ *
+ * @version 1.1
+ * @since   11/08/2020
  */
 public class IssuerApi extends VcxJava.API {
 
@@ -45,7 +45,7 @@ public class IssuerApi extends VcxJava.API {
      * @param credentialName Name of the credential - ex. Drivers Licence
      * @param price price of credential
      * @return A created credential
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      * <pre><span style="color: gray;font-style: italic;">
      *   Example:
      *
@@ -78,7 +78,7 @@ public class IssuerApi extends VcxJava.API {
      *         IssuerApi.{@link #issuerCredentialRelease issuerCredentialRelease}(credentialHandle);
      *         CredentialDefApi.{@link com.evernym.sdk.vcx.credentialDef.CredentialDefApi#credentialDefRelease credentialDefRelease}(credDefHandle);
      * </span></pre>
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Credential Definition Create Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Credential Definition Create Example</a>
      *
      */
     public static CompletableFuture<Integer> issuerCreateCredential(String sourceId,
@@ -130,7 +130,7 @@ public class IssuerApi extends VcxJava.API {
      * @param credentialHandle Credential handle that was provided during creation. Used to identify credential object.
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer issuerCreateCredential example for credential demo"
+     * @see "refer to issuerCreateCredential example for credential demo"
      * @see #issuerCreateCredential
      */
     public static CompletableFuture<Integer> issuerSendCredentialOffer(int credentialHandle,
@@ -156,7 +156,7 @@ public class IssuerApi extends VcxJava.API {
      * @param credentialHandle Credential handle that was provided during creation. Used to identify credential object.
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer issuerCreateCredential example for credential demo"
+     * @see "refer to issuerCreateCredential example for credential demo"
      * @see #issuerCreateCredential
      */
     public static CompletableFuture<String> issuerGetCredentialOfferMsg(int credentialHandle) throws VcxException {
@@ -195,7 +195,7 @@ public class IssuerApi extends VcxJava.API {
      *  2 - Offer Sent
      *  3 - Request Received
      *  4 - Issued </span></pre>
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      * <pre><span style="color: gray;font-style: italic;">
      *   Example:
      *
@@ -224,7 +224,7 @@ public class IssuerApi extends VcxJava.API {
      *    // Credential Release
      *         IssuerApi.{@link #issuerCredentialRelease issuerCredentialRelease}(credentialHandle);
      * </span></pre>
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Credential Definition Create Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Credential Definition Create Example</a>
      *
      */
     public static CompletableFuture<Integer> issuerCredentialUpdateState(int credentialHandle) throws VcxException {
@@ -274,7 +274,7 @@ public class IssuerApi extends VcxJava.API {
      *  2 - Offer Sent
      *  3 - Request Received
      *  4 - Issued</span></pre>
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      *
      */
     public static CompletableFuture<Integer> issuerCredentialGetState(int credentialHandle) throws VcxException {
@@ -303,7 +303,7 @@ public class IssuerApi extends VcxJava.API {
      * @param connectionHandle Connection handle that identifies pairwise connection.
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer issuerCreateCredential example for credential demo"
+     * @see "refer to issuerCreateCredential example for credential demo"
      * @see #issuerCreateCredential
      */
     public static CompletableFuture<Integer> issuerSendCredential(int credentialHandle,
@@ -365,7 +365,7 @@ public class IssuerApi extends VcxJava.API {
      * @param credentialHandle Credential handle that was provided during creation. Used to identify credential object.
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer issuerCreateCredential example for credential demo"
+     * @see "refer to issuerCreateCredential example for credential demo"
      * @see #issuerCreateCredential
      */
     public static CompletableFuture<String> issuerCredentialSerialize(int credentialHandle) throws VcxException {
@@ -445,7 +445,7 @@ public class IssuerApi extends VcxJava.API {
      * @param credentialHandle Credential handle that was provided during creation. Used to identify credential object.
      * @return Success
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer issuerCreateCredential example for credential demo"
+     * @see "refer to issuerCreateCredential example for credential demo"
      * @see #issuerCreateCredential
      */
     public static int issuerCredentialRelease(int credentialHandle) throws VcxException {
@@ -516,7 +516,7 @@ public class IssuerApi extends VcxJava.API {
      *
      * @param credentialHandle Credential handle that was provided during creation. Used to identify credential object.
      * @return completable future
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      * <pre><span style="color: gray;font-style: italic;">
      *   Example:
      *
@@ -540,7 +540,7 @@ public class IssuerApi extends VcxJava.API {
      *   // Release
      *         IssuerApi.{@link #issuerCredentialRelease issuerCredentialRelease}(credentialHandle);
      * </span></pre>
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Credential Revocation Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Credential Revocation Example</a>
      *
      */
     public static CompletableFuture<Integer> issuerRevokeCredential(int credentialHandle) throws VcxException {

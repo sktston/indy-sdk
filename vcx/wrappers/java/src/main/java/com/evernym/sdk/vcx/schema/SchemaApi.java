@@ -14,11 +14,10 @@ import java.util.concurrent.CompletableFuture;
 /**
  * <h1>VCX Schema API.</h1>
  * VCX Schema APIs <br>
- * Javadoc written by SKTelecom (The original is vcx and python wrapper documents)
+ * Javadoc as written by JJ (Referring to libvcx and python wrapper documents)
  *
- * @author  JJ
- * @version 1.0
- * @since   2020-06-31
+ * @version 1.1
+ * @since   11/08/2020
  */
 public class SchemaApi extends VcxJava.API {
     private static final Logger logger = LoggerFactory.getLogger("SchemaApi");
@@ -69,7 +68,7 @@ public class SchemaApi extends VcxJava.API {
      *         SchemaApi.{@link #schemaRelease schemaRelease}(schemaHandle);
      *   }
      * </span></pre>
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Schema Create Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Schema Create Example</a>
      * @since 1.0
      */
     public static CompletableFuture<Integer> schemaCreate(String sourceId,
@@ -141,7 +140,7 @@ public class SchemaApi extends VcxJava.API {
      *              }
      *          }
      * </pre>
-     * @see "Refer schemaCreate example for credential demo"
+     * @see "Refer to schemaCreate example for credential demo"
      * @see #schemaCreate
      */
     public static CompletableFuture<String> schemaSerialize(int schemaHandle) throws VcxException {
@@ -263,7 +262,7 @@ public class SchemaApi extends VcxJava.API {
      * @param schemaHandle Schema handle that was provided during creation. Used to access proof object
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer schemaCreate example for credential demo"
+     * @see "Refer to schemaCreate example for credential demo"
      * @see #schemaCreate
      */
     public static CompletableFuture<String> schemaGetSchemaId( int schemaHandle) throws VcxException {
@@ -281,7 +280,7 @@ public class SchemaApi extends VcxJava.API {
      * @param schemaHandle Schema handle that was provided during creation. Used to access schema object
      * @return Success
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer schemaCreate example for credential demo"
+     * @see "Refer to schemaCreate example for credential demo"
      * @see #schemaCreate
      */
     public static int schemaRelease(

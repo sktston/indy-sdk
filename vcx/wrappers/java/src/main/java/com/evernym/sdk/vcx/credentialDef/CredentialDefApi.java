@@ -14,10 +14,10 @@ import java.util.concurrent.CompletableFuture;
 /**
  * <h1>VCX Credential Definition API.</h1>
  * VCX Credential Definition APIs <br>
- * Javadoc written by SKTelecom (The original is vcx and python wrapper documents)
- * @author  JJ
- * @version 1.0
- * @since   09/08/2020
+ * Javadoc as written by JJ (Referring to libvcx and python wrapper documents)
+ *
+ * @version 1.1
+ * @since   11/08/2020
  */
 public class CredentialDefApi extends VcxJava.API {
 
@@ -51,7 +51,7 @@ public class CredentialDefApi extends VcxJava.API {
      *   max_creds: size of tails file - Optional if support_revocation is false </span></pre>
      * @param paymentHandle future use (currently uses any address in wallet)
      * @return completable future
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      *
      */
     public static CompletableFuture<Integer> credentialDefCreate(String sourceId,
@@ -108,7 +108,7 @@ public class CredentialDefApi extends VcxJava.API {
      *
      * @param credentialDefHandle Credentialdef handle that was provided during creation. Used to access credentialdef object.
      * @return completable future
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      *
      */
     public static CompletableFuture<String> credentialDefSerialize(int credentialDefHandle) throws VcxException {
@@ -149,7 +149,7 @@ public class CredentialDefApi extends VcxJava.API {
      *
      * @param credentialDefData Credentialdef handle that was provided during creation. Used to access credentialdef object.
      * @return completable future
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      *
      */
     public static CompletableFuture<Integer> credentialDefDeserialize(String credentialDefData) throws VcxException {
@@ -184,7 +184,7 @@ public class CredentialDefApi extends VcxJava.API {
      *
      * @param credDefHandle CredDef handle that was provided during creation. Used to access proof object.
      * @return completable future
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      *
      */
     public static CompletableFuture<String> credentialDefGetCredentialDefId(int credDefHandle) throws VcxException {
@@ -202,7 +202,7 @@ public class CredentialDefApi extends VcxJava.API {
      *
      * @param handle Proof handle that was provided during creation. Used to access credential object.
      * @return Success
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      *
      */
     public static int credentialDefRelease(int handle) throws VcxException {
@@ -242,7 +242,7 @@ public class CredentialDefApi extends VcxJava.API {
      *   max_creds: size of tails file - Optional if support_revocation is false </span></pre>
      * @param endorser DID of the Endorser that will submit the transaction.
      * @return A created credential
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      * <pre><span style="color: gray;font-style: italic;">
      *   Example:
      *   // get schema Info
@@ -273,7 +273,7 @@ public class CredentialDefApi extends VcxJava.API {
      *                 JsonPath.parse((LinkedHashMap)JsonPath.read(credDefData,"$.config")).jsonString(),
      *                 faberDid).get();
      * </span></pre>
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Credential Definition Create Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Credential Definition Create Example</a>
      *
      */
 	public static CompletableFuture<CredentialDefPrepareForEndorserResult> credentialDefPrepareForEndorser(String sourceId,
@@ -327,7 +327,7 @@ public class CredentialDefApi extends VcxJava.API {
      * <pre><span style="color: gray;font-style: italic;">Possible states:
      *              0 = Built
      *              1 = Published </span></pre>
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      * <pre><span style="color: gray;font-style: italic;">
      *   Example:
      *   // Create a new credential definition object
@@ -356,7 +356,7 @@ public class CredentialDefApi extends VcxJava.API {
      *         else
      *             log.warning("Publishing is failed");
      * </span></pre>
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Credential Definition Create Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Credential Definition Create Example</a>
      *
      */
 	public static CompletableFuture<Integer> credentialDefUpdateState(int handle) throws VcxException {
@@ -381,7 +381,7 @@ public class CredentialDefApi extends VcxJava.API {
      * <pre><span style="color: gray;font-style: italic;">Possible states:
      *              0 = Built
      *              1 = Published </span></pre>
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      *
      */
 	public static CompletableFuture<Integer> credentialDefGetState(int handle) throws VcxException {

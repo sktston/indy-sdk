@@ -14,10 +14,10 @@ import java.util.concurrent.CompletableFuture;
 /**
  * <h1>VCX Credential Definition API.</h1>
  * VCX Credential Definition APIs <br>
- * Javadoc written by SKTelecom (The original is vcx and python wrapper documents)
- * @author  JJ
- * @version 1.0
- * @since   09/08/2020
+ * Javadoc as written by JJ (Referring to libvcx and python wrapper documents)
+ *
+ * @version 1.1
+ * @since   11/08/2020
  */
 public class ProofApi extends VcxJava.API {
     private ProofApi(){}
@@ -78,7 +78,7 @@ public class ProofApi extends VcxJava.API {
      *  # Examples config ->  "{}" | "{"to": 123} | "{"from": 100, "to": 123}"
      * </span></pre>
      * @return Proof Object
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      * <pre><span style="color: gray;font-style: italic;">
      *   Example:
      *
@@ -133,7 +133,7 @@ public class ProofApi extends VcxJava.API {
      *   // Proof Release
      *         ProofApi.{@link #proofRelease proofRelease}(proofHandle);
      * </span></pre>
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Proof Create Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Proof Create Example</a>
      *
      */
     public static CompletableFuture<Integer> proofCreate(
@@ -175,7 +175,7 @@ public class ProofApi extends VcxJava.API {
      * @param connectionHandle Connection handle that identifies pairwise connection.
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer proofCreate example for credential demo"
+     * @see "Refer to proofCreate example for credential demo"
      * @see #proofCreate
      */
     public static CompletableFuture<Integer> proofSendRequest(
@@ -257,8 +257,8 @@ public class ProofApi extends VcxJava.API {
      *
      * @param proofHandle Proof handle that was provided during creation. Used to identify proof object.
      * @return completable future
-     * @throws VcxException the vcx exception.
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Proof Create Example</a>
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Proof Create Example</a>
      *
      */
     public static CompletableFuture<GetProofResult> getProofMsg(
@@ -282,7 +282,7 @@ public class ProofApi extends VcxJava.API {
      *
      * @param proofHandle Proof handle that was provided during creation. Used to identify proof object.
      * @return completable future
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      *
      */
     public static CompletableFuture<Integer> proofAccepted(
@@ -321,7 +321,7 @@ public class ProofApi extends VcxJava.API {
      *  2 - Request Sent
      *  3 - Proof Received
      *  4 - Accepted </span></pre>
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      * <pre><span style="color: gray;font-style: italic;">
      *   Example:
      *     // get proof
@@ -336,7 +336,7 @@ public class ProofApi extends VcxJava.API {
      *     // Proof Update State
      *         int proofState = ProofApi.{@link #proofUpdateState proofUpdateState}(proofHandle).get();
      * </span></pre>
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Proof update state Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Proof update state Example</a>
      *
      */
     public static CompletableFuture<Integer> proofUpdateState(
@@ -428,7 +428,7 @@ public class ProofApi extends VcxJava.API {
      * @param proofHandle Proof handle that was provided during creation. Used to access proof object.
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer proofCreate example for credential demo"
+     * @see "Refer to proofCreate example for credential demo"
      * @see #proofCreate
      */
     public static CompletableFuture<String> proofSerialize(
@@ -461,7 +461,7 @@ public class ProofApi extends VcxJava.API {
      * @param serializedProof json string representing a proof object
      * @return Success
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer proofCreate example for credential demo"
+     * @see "Refer to proofCreate example for credential demo"
      * @see #proofCreate
      */
     public static CompletableFuture<Integer> proofDeserialize(
@@ -484,7 +484,7 @@ public class ProofApi extends VcxJava.API {
      * @param proofHandle Proof handle that was provided during creation. Used to access proof object.
      * @return Success
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer proofCreate example for credential demo"
+     * @see "Refer to proofCreate example for credential demo"
      * @see #proofCreate
      */
     public static int proofRelease(int proofHandle) throws VcxException {

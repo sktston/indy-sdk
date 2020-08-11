@@ -16,11 +16,10 @@ import java.util.concurrent.CompletableFuture;
  * <h1>VCX Connection API.</h1>
  * VCX Connection APIs<br>
  * Created by abdussami on 05/06/18.<br>
- * Javadoc written by SKTelecom (The original is vcx and python wrapper documents)
+ * Javadoc as written by JJ (Referring to libvcx and python wrapper documents)
  *
- * @author  JJ
- * @version 1.0
- * @since   07/08/2020
+ * @version 1.1
+ * @since   11/08/2020
  */
 public class ConnectionApi extends VcxJava.API {
 
@@ -64,7 +63,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *         WalletApi.{@link com.evernym.sdk.vcx.wallet.WalletApi#addRecordWallet addRecordWallet}("connection", pwDid, serializedConnection, "").get();
 	 *   // Connection Release
 	 *         ConnectionApi.{@link #connectionRelease connectionRelease}(connectionHandle); </span></pre>
-	 * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/45da71c6c3e37460eb5fcc038777fe851fe508f7/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Connection with Invite Example</a>
+	 * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Connection with Invite Example</a>
 	 *
 	 */
 	public static CompletableFuture<Integer> vcxConnectionCreate(String sourceId) throws VcxException {
@@ -112,11 +111,13 @@ public class ConnectionApi extends VcxJava.API {
 	 *           if (connectionState == VcxState.RequestReceived.getValue()) {
 	 *   // new relationship - Get PW DID & Serialized & Record Wallet
 	 *               String newPwDid = ConnectionApi.{@link #connectionGetPwDid connectionGetPwDid}(connectionHandle).get();
+	 *   // Connection Serialize
 	 *               serializedConnection = ConnectionApi.{@link #connectionSerialize connectionSerialize}(connectionHandle).get();
+	 *   // Add Record Wallet
 	 *               WalletApi.{@link com.evernym.sdk.vcx.wallet.WalletApi#addRecordWallet addRecordWallet}("connection", newPwDid, serializedConnection, "").get();
 	 *           }
 	 *   </span></pre>
-	 * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/45da71c6c3e37460eb5fcc038777fe851fe508f7/src/main/java/webhook/faber/GlobalController.java" target="_blank">VCX JAVA Demo - Connection Update State Example</a>
+	 * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalController.java" target="_blank">VCX JAVA Demo - Connection Update State Example</a>
 	 */
 	public static CompletableFuture<Integer> vcxConnectionUpdateState(int connectionHandle) throws VcxException {
 		logger.debug("vcxConnectionUpdateState() called with: connectionHandle = [" + connectionHandle + "]");
@@ -195,7 +196,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *        } </span></pre>
 	 * @return completable future
 	 * @throws VcxException the vcx exception
-	 * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/45da71c6c3e37460eb5fcc038777fe851fe508f7/src/main/java/webhook/alice/GlobalService.java" target="_blank">VCX JAVA Demo - Connection with Invite Example</a>
+	 * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/alice/GlobalService.java" target="_blank">VCX JAVA Demo - Connection with Invite Example</a>
 	 */
 	public static CompletableFuture<Integer> vcxCreateConnectionWithInvite(String invitationId, String inviteDetails) throws VcxException {
 		ParamGuard.notNullOrWhiteSpace(invitationId, "invitationId");
@@ -252,7 +253,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param connectionType   the connection type
 	 * @return completable future
 	 * @throws VcxException the vcx exception
-	 * @see "Refer vcxConnectionCreate example for vcxConnectionConnect demo"
+	 * @see "Refer to vcxConnectionCreate example for vcxConnectionConnect demo"
 	 * @see #vcxConnectionCreate
 	 */
 	public static CompletableFuture<String> vcxConnectionConnect(int connectionHandle, String connectionType) throws VcxException {
@@ -363,7 +364,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param connectionHandle the connection handle
 	 * @return completable future
 	 * @throws VcxException the vcx exception
-	 * @see "Refer vcxConnectionCreate example for connectionSerialize demo"
+	 * @see "Refer to vcxConnectionCreate example for connectionSerialize demo"
 	 * @see #vcxConnectionCreate
 	 */
 	public static CompletableFuture<String> connectionSerialize(int connectionHandle) throws VcxException {
@@ -419,7 +420,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *   // Deserialize Connection
 	 *         int connectionHandle = ConnectionApi.{@link #connectionDeserialize connectionDeserialize}(serializedConnection).get();
 	 * </span></pre>
-	 * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/45da71c6c3e37460eb5fcc038777fe851fe508f7/src/main/java/webhook/faber/GlobalController.java" target="_blank">VCX JAVA Demo - connectionDeserialize Example</a>
+	 * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalController.java" target="_blank">VCX JAVA Demo - connectionDeserialize Example</a>
 	 */
 	public static CompletableFuture<Integer> connectionDeserialize(String connectionData) throws VcxException {
 		ParamGuard.notNull(connectionData, "connectionData");
@@ -481,7 +482,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param abbreviated      the abbreviated
 	 * @return completable future
 	 * @throws VcxException the vcx exception
-	 * @see "Refer vcxConnectionCreate example for vcxConnectionConnect demo"
+	 * @see "Refer to vcxConnectionCreate example for vcxConnectionConnect demo"
 	 * @see #vcxConnectionCreate
 	 */
 	public static CompletableFuture<String> connectionInviteDetails(int connectionHandle, int abbreviated) throws VcxException {
@@ -500,7 +501,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param handle the handle
 	 * @return Success
 	 * @throws VcxException the vcx exception
-	 * @see "Refer vcxConnectionCreate example for vcxConnectionConnect demo"
+	 * @see "Refer to vcxConnectionCreate example for vcxConnectionConnect demo"
 	 * @see #vcxConnectionCreate
 	 */
 	public static int connectionRelease(int handle) throws VcxException {
@@ -717,7 +718,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param connectionHandle Connection handle that identifies pairwise connection
 	 * @return completable future
 	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-	 * @see "Refer vcxConnectionCreate example for vcxConnectionConnect demo"
+	 * @see "Refer to vcxConnectionCreate example for vcxConnectionConnect demo"
 	 * @see #vcxConnectionCreate
 	 */
 	public static CompletableFuture<String> connectionGetPwDid(int connectionHandle) throws VcxException {

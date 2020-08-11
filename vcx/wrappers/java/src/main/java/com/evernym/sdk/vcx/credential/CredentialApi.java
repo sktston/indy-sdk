@@ -13,11 +13,10 @@ import java.util.concurrent.CompletableFuture;
 /**
  * <h1>VCX Credential API.</h1>
  * VCX Credential APIs <br>
- * Javadoc written by SKTelecom (The original is vcx and python wrapper documents)
+ * Javadoc as written by JJ (Referring to libvcx and python wrapper documents)
  *
- * @author  JJ
- * @version 1.0
- * @since   09/08/2020
+ * @version 1.1
+ * @since   11/08/2020
  */
 public class CredentialApi extends VcxJava.API {
 
@@ -42,7 +41,7 @@ public class CredentialApi extends VcxJava.API {
      *
      * @param sourceId Institution's personal identification for the credential, should be unique.
      * @param connectionHandle connection to query for credential offer
-     * @param msgId msg_id that contains the credential offer
+     * @param msgId msgid that contains the credential offer
      * @return A created credential
      * @throws VcxException the vcx exception.
      *
@@ -165,7 +164,7 @@ public class CredentialApi extends VcxJava.API {
      * @param credentailHandle Credential handle that was provided during creation. Used to identify credential object.
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer credentialSendRequest example for credential demo"
+     * @see "Refer to credentialSendRequest example for credential demo"
      * @see #credentialSendRequest
      */
     public static CompletableFuture<String> credentialSerialize(
@@ -327,7 +326,7 @@ public class CredentialApi extends VcxJava.API {
      * @param credentialHandle Credential handle that was provided during creation. Used to identify credential object.
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer credentialSendRequest example for credential demo"
+     * @see "Refer to credentialSendRequest example for credential demo"
      * @see #credentialSendRequest
      */
     public static CompletableFuture<Integer> credentialUpdateState(
@@ -407,7 +406,7 @@ public class CredentialApi extends VcxJava.API {
      * @param credentialHandle Credential handle that was provided during creation. Used to access credential object.
      * @return Success
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer credentialSendRequest example for credential demo"
+     * @see "Refer to credentialSendRequest example for credential demo"
      * @see #credentialSendRequest
      */
     public static int credentialRelease(int credentialHandle) throws VcxException {
@@ -438,7 +437,7 @@ public class CredentialApi extends VcxJava.API {
      * @param connectionHandle Connection to query for credential offers.
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer credentialSendRequest example for credential demo"
+     * @see "Refer to credentialSendRequest example for credential demo"
      * @see #credentialSendRequest
      */
     public static CompletableFuture<String> credentialGetOffers(
@@ -473,7 +472,7 @@ public class CredentialApi extends VcxJava.API {
      * @param credentialOffer credential offer received via "vcx_credential_get_offers"
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer credentialSendRequest example for credential demo"
+     * @see "Refer to credentialSendRequest example for credential demo"
      * @see #credentialSendRequest
      */
     public static CompletableFuture<Integer> credentialCreateWithOffer(

@@ -16,11 +16,10 @@ import java.util.concurrent.CompletableFuture;
  * VCX Schema APIs
  *
  * Created by abdussami on 17/05/18.<br>
- * Javadoc written by SKTelecom (The original is vcx and python wrapper documents)
+ * Javadoc as written by JJ (Referring to libvcx and python wrapper documents)
  *
- * @author  JJ
- * @version 1.0
- * @since   2020-06-31
+ * @version 1.1
+ * @since   11/08/2020
  */
 public class UtilsApi extends VcxJava.API {
     private static final Logger logger = LoggerFactory.getLogger("UtilsApi");
@@ -74,7 +73,7 @@ public class UtilsApi extends VcxJava.API {
      *         WalletApi.{@link com.evernym.sdk.vcx.wallet.WalletApi#addRecordWallet addRecordWallet}("vcxConfig", "defaultVcxConfig", vcxConfig, "").get();
 
      * </span></pre>
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Schema Create Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Schema Create Example</a>
      * @since 1.0
      */
     public static String vcxProvisionAgent(String config) {
@@ -90,7 +89,7 @@ public class UtilsApi extends VcxJava.API {
      *
      * @param conf configuration
      * @return result
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Schema Create Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Schema Create Example</a>
      * @since 1.0
      */
     public static CompletableFuture<String> vcxAgentProvisionAsync(String conf) throws VcxException {
@@ -121,7 +120,7 @@ public class UtilsApi extends VcxJava.API {
      * @param config updated configuration
      * <br>
      * @return completable future
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Schema Create Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Schema Create Example</a>
      * @since 1.0
      */
     public static CompletableFuture<Integer> vcxUpdateAgentInfo(String config) throws VcxException {
@@ -164,7 +163,7 @@ public class UtilsApi extends VcxJava.API {
      * @param pwdids optional, comma separated - DID's pointing to specific connection
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer credentialSendRequest example for vcx update message demo"
+     * @see "Refer to credentialSendRequest example for vcx update message demo"
      * @see com.evernym.sdk.vcx.credential.CredentialApi#credentialSendRequest
      */
     public static CompletableFuture<String> vcxGetMessages(String messageStatus, String uids, String pwdids) throws VcxException {
@@ -241,7 +240,7 @@ public class UtilsApi extends VcxJava.API {
      * @param msgJson messages to update: [{"pairwiseDID":"QSrw8hebcvQxiwBETmAaRs","uids":["mgrmngq"]},...]
      * @return completable future
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
-     * @see "Refer credentialSendRequest example for vcx update message demo"
+     * @see "Refer to credentialSendRequest example for vcx update message demo"
      * @see com.evernym.sdk.vcx.credential.CredentialApi#credentialSendRequest
      */
     public static CompletableFuture<Integer> vcxUpdateMessages(String messageStatus, String msgJson) throws VcxException {

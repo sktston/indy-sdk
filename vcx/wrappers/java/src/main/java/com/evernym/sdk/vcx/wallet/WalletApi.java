@@ -15,11 +15,10 @@ import java.util.concurrent.CompletableFuture;
 /**
  * <h1>VCX Wallet API.</h1>
  * VCX Wallet APIs <br>
- * Javadoc written by SKTelecom (The original is vcx and python wrapper documents)
+ * Javadoc as written by JJ (Referring to libvcx and python wrapper documents)
  *
- * @author  JJ
- * @version 1.0
- * @since   2020-08-06
+ * @version 1.1
+ * @since   11/08/2020
  */
 
 public class WalletApi extends VcxJava.API {
@@ -233,7 +232,7 @@ public class WalletApi extends VcxJava.API {
      *       "~tagName3": <str>, // string tag (will be stored un-encrypted)
      *       "~tagName4": <int>, // int tag (will be stored un-encrypted)
      *       }
-     * The tags_json must be valid json, and if no tags are to be associated with the
+     * The tagsjson must be valid json, and if no tags are to be associated with the
      * record, then the empty '{}' json must be passed. </span></pre>
      *
      * @return
