@@ -12,6 +12,16 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * <h1>VCX Wallet API.</h1>
+ * VCX Wallet APIs <br>
+ * Javadoc written by SKTelecom (The original is vcx and python wrapper documents)
+ *
+ * @author  JJ
+ * @version 1.0
+ * @since   2020-08-06
+ */
+
 public class WalletApi extends VcxJava.API {
     private static final Logger logger = LoggerFactory.getLogger("WalletApi");
 
@@ -29,6 +39,21 @@ public class WalletApi extends VcxJava.API {
         }
     };
 
+    /**
+     * <p>Exports opened wallet.</p><br>
+     * Allow users to export their wallets so the can do the backup or move their secret data to different agency or different device.
+     * <br> - Export file will be encrypted with export key.
+     * <br> - Export should contain the whole wallet data (including secrets).
+     * <br> - Export should be done in a streaming way so big wallets may be exported on machines with conservative memory.
+     *
+     * @param exportPath Path to export wallet to User's File System.
+     * @param encryptionKey String representing the User's Key for securing (encrypting) the exported Wallet.
+     * <pre><span style="color: gray;font-style: italic;"> Example:
+     *      WalletApi.exportWallet("export/wallet_name", "mysecretkey").get(); </span></pre>
+     * @return success indicates that the wallet was successfully exported.
+     * @see <a href="https://github.com/hyperledger/indy-sdk/tree/master/docs/design/009-wallet-export-import">Wallet Export/Import Design</a>
+     * @since 1.0
+     */
     public static CompletableFuture<Integer> exportWallet(
             String exportPath,
             String encryptionKey
@@ -55,6 +80,20 @@ public class WalletApi extends VcxJava.API {
             future.complete(result);
         }
     };
+
+    /**
+     * <p>Imports wallet from file with given key.</p><br>
+     * Creates a new secure wallet and then imports its content
+     * <br>according to fields provided in import_config
+     * <br>Cannot be used if wallet is already opened (Especially if vcx_init has already been used).
+     *     <br>Must include: '{"wallet_name":"","wallet_key":"","exported_wallet_path":"","backup_key":""}'
+     * @param config Can be same config that is passed to vcx_init..
+     * <pre><span style="color: gray;font-style: italic;"> Example:
+     *      WalletApi.importWallet({"wallet_name":"","wallet_key":"","exported_wallet_path":"","backup_key":"","key_derivation":""}).get();}</span></pre>
+     * @return success indicates that the wallet was successfully imported.
+     * @see <a href="https://github.com/hyperledger/indy-sdk/tree/master/docs/design/009-wallet-export-import">Wallet Export/Import Design</a>
+     * @since 1.0
+     */
 
     public static CompletableFuture<Integer> importWallet(
             String config
@@ -180,6 +219,30 @@ public class WalletApi extends VcxJava.API {
         }
     };
 
+    /**
+     * Adds a record to the wallet<br>
+     * Assumes there is an open wallet.
+     *
+     * @param recordType type of record. (e.g. 'data', 'string', 'foobar', 'image')
+     * @param recordId the id ("key") of the record.
+     * @param recordValue value of the record with the associated id.
+     * @param tagsJson the record tags used for search and storing meta information as json.
+     *<pre><span style="color: gray;font-style: italic;">       {
+     *       "tagName1": <str>, // string tag (will be stored encrypted)
+     *       "tagName2": <int>, // int tag (will be stored encrypted)
+     *       "~tagName3": <str>, // string tag (will be stored un-encrypted)
+     *       "~tagName4": <int>, // int tag (will be stored un-encrypted)
+     *       }
+     * The tags_json must be valid json, and if no tags are to be associated with the
+     * record, then the empty '{}' json must be passed. </span></pre>
+     *
+     * @return
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     * <pre><span style="color: gray;font-style: italic;"> Example:
+     *     String newPwDid = ConnectionApi.{@link com.evernym.sdk.vcx.connection.ConnectionApi#connectionGetPwDid connectionGetPwDid}(connectionHandle).get();
+     *     serializedConnection = ConnectionApi.{@link com.evernym.sdk.vcx.connection.ConnectionApi#connectionSerialize connectionSerialize}(connectionHandle).get();
+     *     WalletApi.{@link com.evernym.sdk.vcx.wallet.WalletApi#addRecordWallet addRecordWallet}("connection", newPwDid, serializedConnection, "").get(); </span></pre>
+     */
     public static CompletableFuture<Integer> addRecordWallet(
             String recordType,
             String recordId,
@@ -211,6 +274,18 @@ public class WalletApi extends VcxJava.API {
         }
     };
 
+
+    /**
+     * Deletes an existing record
+     * Assumes there is an open wallet and that a type and id pair already exists.
+     *
+     * @param recordType type of record. (e.g. 'data', 'string', 'foobar', 'image')
+     * @param recordId the id ("key") of the record.
+     *
+     * @return Completable future
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     *
+     */
     public static CompletableFuture<Integer> deleteRecordWallet(
             String recordType,
             String recordId
@@ -239,7 +314,16 @@ public class WalletApi extends VcxJava.API {
             future.complete(recordValue);
         }
     };
-
+    /**
+     * Retrieves a record from the wallet storage
+     *
+     * @param recordType type of record. (e.g. 'data', 'string', 'foobar', 'image')
+     * @param recordId the id ("key") of the record.
+     * @param optionsJson String
+     * @return Completable future
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     *
+     */
     public static CompletableFuture<String> getRecordWallet(
             String recordType,
             String recordId,
@@ -268,7 +352,17 @@ public class WalletApi extends VcxJava.API {
             future.complete(result);
         }
     };
-
+    /**
+     * Updates the value of a record already in the wallet.<br>
+     * Assumes there is an open wallet and that a type and id pair already exists.
+     *
+     * @param recordType type of record. (e.g. 'data', 'string', 'foobar', 'image')
+     * @param recordId the id ("key") of the record.
+     * @param recordValue New value of the record with the associated id.
+     * @return Completable future
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     *
+     */
     public static CompletableFuture<Integer> updateRecordWallet(
             String recordType,
             String recordId,
@@ -307,11 +401,11 @@ public class WalletApi extends VcxJava.API {
      *
      * @param recordType Allows to separate different record types collections
      * @param recordId The id of record
-     * @param tagsJson The record tags used for search and storing meta information as json:
+     * @param tagsJson The record tags used for search and storing meta information as json: <pre><span style="color: gray;font-style: italic;">
      *                  {
      *                      "tagName1": "str", // string tag (will be stored encrypted)
      *                      "~tagName2": "str", // string tag (will be stored un-encrypted)
-     *                  }
+     *                  } </span></pre>
      * @return A future that resolves no value.
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      */
@@ -351,11 +445,11 @@ public class WalletApi extends VcxJava.API {
      *
      * @param recordType Allows to separate different record types collections
      * @param recordId The id of record
-     * @param tagsJson The record tags used for search and storing meta information as json:
+     * @param tagsJson The record tags used for search and storing meta information as json: <pre><span style="color: gray;font-style: italic;">
      *                  {
      *                      "tagName1": "str", // string tag (will be stored encrypted)
      *                      "~tagName2": "str", // string tag (will be stored un-encrypted)
-     *                  }
+     *                  } </span></pre>
      * @return A future that resolves no value.
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      */
@@ -396,8 +490,8 @@ public class WalletApi extends VcxJava.API {
      *
      * @param recordType Allows to separate different record types collections
      * @param recordId The id of record
-     * @param tagNamesJson The list of tag names to remove from the record as json array:
-     *                     ["tagName1", "tagName2", ...]
+     * @param tagNamesJson The list of tag names to remove from the record as json array: <pre><span style="color: gray;font-style: italic;">
+     *                     ["tagName1", "tagName2", ...] </span></pre>
      * @return A future that resolves no value.
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      */
@@ -437,21 +531,22 @@ public class WalletApi extends VcxJava.API {
      * Open a search handle within the storage wallet.
      *
      * @param recordType Allows to separate different record types collections
-     * @param queryJson MongoDB style query to wallet record tags:
+     * @param queryJson MongoDB style query to wallet record tags: <pre><span style="color: gray;font-style: italic;">
      *                    {
      *                      "tagName": "tagValue",
      *                      $or: {
      *                          "tagName2": { $regex: 'pattern' },
      *                          "tagName3": { $gte: '123' },
      *                      }
-     *                    }
-     * @param optionsJson {
+     *                    } </span></pre>
+     * @param optionsJson string <pre><span style="color: gray;font-style: italic;">
+     *                    {
      *                      retrieveRecords: (optional, true by default) If false only "counts" will be calculated,
      *                      retrieveTotalCount: (optional, false by default) Calculate total count,
      *                      retrieveType: (optional, false by default) Retrieve record type,
      *                      retrieveValue: (optional, true by default) Retrieve record value,
      *                      retrieveTags: (optional, false by default) Retrieve record tags,
-     *                    }
+     *                    } </span></pre>
      * @return A future that resolves to WalletSearch instance.
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      */
@@ -497,7 +592,7 @@ public class WalletApi extends VcxJava.API {
      *
      * @param searchHandle The wallet search handle.
      * @param count Count of records to fetch
-     * @return A future resolving to the wallet records json:
+     * @return A future resolving to the wallet records json: <pre><span style="color: gray;font-style: italic;">
      * {
      *      totalCount: int, // present only if retrieveTotalCount set to true
      *      records: [{ // present only if retrieveRecords set to true
@@ -506,7 +601,7 @@ public class WalletApi extends VcxJava.API {
      *          value: "Some value", // present only if retrieveValue set to true
      *          tags: "Some tags json", // present only if retrieveTags set to true
      *      }],
-     * }
+     * } </span></pre>
      * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
      */
     public static CompletableFuture<String> searchNextRecordsWallet(

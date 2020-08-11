@@ -14,10 +14,8 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * <h1>VCX Initialize and Common API</h1>
- * Initializes VCX APIs
- *
- * <p>
- * <b>Note:</b> written by SKT (The original is vcx and python wrapper documents)
+ * Initializes VCX APIs <br>
+ * Javadoc written by SKTelecom (The original is vcx and python wrapper documents)
  *
  * @author  JJ
  * @version 1.0
@@ -60,8 +58,7 @@ public class VcxApi extends VcxJava.API {
      * <p>VCX Init With Config.</p><br>
      * Initializes VCX with config settings
      * <br> An example file is at libvcx/sample_config/config.json
-     * <pre><font color=gray>{@code
-     * {
+     * <pre><span style="color: gray;font-style: italic;"> {
      *   "agency_did": "VsKV7grR1BUE29mG2Fm2kX",
      *   "agency_verkey": "Hezce2UWMZ3wUhVkh2LfKSs8nDzWwzs2Win7EzNN3YaR",
      *   "agency_endpoint": "http://localhost:8080",
@@ -75,19 +72,15 @@ public class VcxApi extends VcxJava.API {
      *   "sdk_to_remote_did": "KacwZ2ndG6396KXJ9NDDw6", // My pariwise DID for agent
      *   "sdk_to_remote_verkey": "B8LgZGxEPcpTJfZkeqXuKNLihM1Awm8yidqsNwYi5QGc", My pairwise Verkey for agent
      *   "payment_method": "null"
-     * }
-     * }</font></pre>
+     * } </span></pre>
      * <br>The list of available options see here :
      * <a href="https://github.com/hyperledger/indy-sdk/blob/ebdf1b62b4b744b94155cb6f032367540b33556c/docs/configuration.md#configuration-options">
      *     Configuration options</a><br>
      *
      * @param configJson config as json
-     * <br> Example:
-     *   <pre>
-     *   {@code
-     *      VcxApi.vcxInitWithConfig(vcxConfig).get();
-     *   }</pre>
-     * @return
+     * <pre><span style="color: gray;font-style: italic;"> Example:
+     *      VcxApi.vcxInitWithConfig(vcxConfig).get(); </span></pre>
+     * @return completable future
      * @see <a href="https://github.com/hyperledger/indy-sdk/blob/ebdf1b62b4b744b94155cb6f032367540b33556c/docs/configuration.md">Indy SDK configuration</a>
      * @since 1.0
      */
@@ -109,8 +102,7 @@ public class VcxApi extends VcxJava.API {
     /**
      * <p>Initializes VCX with config file.</P><br>
      * An example file is at libvcx/sample_config/config.json
-     * <pre><font color=gray>{@code
-     * {
+     * <pre><span style="color: gray;font-style: italic;"> {
      *   "agency_did": "VsKV7grR1BUE29mG2Fm2kX",
      *   "agency_verkey": "Hezce2UWMZ3wUhVkh2LfKSs8nDzWwzs2Win7EzNN3YaR",
      *   "agency_endpoint": "http://localhost:8080",
@@ -124,18 +116,15 @@ public class VcxApi extends VcxJava.API {
      *   "sdk_to_remote_did": "KacwZ2ndG6396KXJ9NDDw6", // My pariwise DID for agent
      *   "sdk_to_remote_verkey": "B8LgZGxEPcpTJfZkeqXuKNLihM1Awm8yidqsNwYi5QGc", My pairwise Verkey for agent
      *   "payment_method": "null"
-     * }
-     * }</font></pre>
+     * } </span></pre>
      * The list of available options see here :
      * <a href="https://github.com/hyperledger/indy-sdk/blob/ebdf1b62b4b744b94155cb6f032367540b33556c/docs/configuration.md#configuration-options">
      *     Configuration options</a><br>
      *
      * @param configPath path to a config file to populate config attributes<br>
-     * Example:
-     *   <pre>
-     *   {@code
+     * <pre><span style="color: gray;font-style: italic;"> Example:
      *   VcxApi.vcxInit('/home/username/config.json').get();
-     *   }</pre>
+     *   </span></pre>
      * @return
      * @see <a href="https://github.com/hyperledger/indy-sdk/blob/ebdf1b62b4b744b94155cb6f032367540b33556c/docs/configuration.md">Indy SDK configuration</a>
      * @since 1.0
@@ -157,23 +146,19 @@ public class VcxApi extends VcxJava.API {
      * <br>Initialize vcx with the minimal configuration (wallet, pool must already be set with
      * <br>vcx wallet set and vcx pool set and without any agency configuration
      * An example file
-     * <pre><font color=gray>{@code
-     * {
+     * <pre><span style="color: gray;font-style: italic;"> {
      *   "institution_name": "institution",
      *   "institution_logo_url": "http://robohash.org/234",
      *   "institution_did": "EwsFhWVoc3Fwqzrwe998aQ",
      *   "institution_verkey": "8brs38hPDkw5yhtzyk2tz7zkp8ijTyWnER165zDQbpK6",
-     * }
-     * }</font></pre>
+     * } </span></pre>
      *
      * @param configJson minimal configuration<br>
-     * Example:
-     *   <pre>
-     *   {@code
+     * <pre><span style="color: gray;font-style: italic;"> Example:
      *      WalletApi.setWalletHandle(1);
      *      UtilsApi.setPoolHandle(1);
      *      assert (VcxApi.vcxInitMinimal("{\"institution_name\":\"f\",\"institution_did\":\"4\", \"institution_verkey\":\"4\"}") == 0);
-     *   }</pre>
+     *   </span></pre>
      * @return
      * @since 1.0
      */
@@ -195,11 +180,9 @@ public class VcxApi extends VcxJava.API {
      * <br> libvcx will be inoperable and must be initialized again with vcx_init_with_config
      *
      * @param deleteWallet specify whether wallet/pool should be deleted
-     * <br>Example:
-     *   <pre>
-     *   {@code
+     * <pre><span style="color: gray;font-style: italic;"> Example:
      *      VcxApi.vcxShutdown(false);
-     *   }</pre>
+     *  </span></pre>
      * @return Success/Fail
      * @since 1.0
      */
@@ -220,11 +203,9 @@ public class VcxApi extends VcxJava.API {
      * <br> Get the message corresponding to an error code
      *
      * @param errorCode code of error
-     * <br>Example:
-     *   <pre>
-     *   {@code
+     * <pre><span style="color: gray;font-style: italic;"> Example:
      *      String errorCMessage = VcxApi.vcxErrorCMessage(1001);
-     *   }</pre>
+     * </span></pre>
      * @return Error message
      * @since 1.0
      */
@@ -240,11 +221,9 @@ public class VcxApi extends VcxJava.API {
      *
      * @param name institution name
      * @param logoUrl url containing institution logo
-     * <br>Example:
-     *   <pre>
-     *   {@code
+     * <pre><span style="color: gray;font-style: italic;"> Example:
      *      String errorCMessage = VcxApi.vcxErrorCMessage(1001);
-     *   }</pre>
+     *   </span></pre>
      * @return Error message
      * @since 1.0
      */
@@ -276,11 +255,9 @@ public class VcxApi extends VcxJava.API {
      * <br> Update Webhook URL for notification in Agent
      *
      * @param notificationWebhookUrl institution webhook URL
-     * <br>Example:
-     *   <pre>
-     *   {@code
+     * <pre><span style="color: gray;font-style: italic;"> Example:
      *      VcxApi.vcxUpdateWebhookUrl('http://localhost:7201/notifications').get();
-     *   }</pre>
+     *   </span></pre>
      * @return
      * @since 1.0
      */

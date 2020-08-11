@@ -11,6 +11,14 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * <h1>VCX Credential Definition API.</h1>
+ * VCX Credential Definition APIs <br>
+ * Javadoc written by SKTelecom (The original is vcx and python wrapper documents)
+ * @author  JJ
+ * @version 1.0
+ * @since   09/08/2020
+ */
 public class ProofApi extends VcxJava.API {
     private ProofApi(){}
 
@@ -25,6 +33,109 @@ public class ProofApi extends VcxJava.API {
         }
     };
 
+    /**
+     * Create a new Proof object that requests a proof for an enterprise <br>
+     *
+     * @param sourceId Enterprise's personal identification for the user.
+     * @param requestedAttrs  Describes requested attribute
+     * <pre><span style="color: gray;font-style: italic;"> example :
+     *   {
+     *    "name": Optional<string>, // attribute name, (case insensitive and ignore spaces)
+     *    "names": Optional<[string, string]>, // attribute names, (case insensitive and ignore spaces)
+     *                                         // NOTE: should either be "name" or "names", not both and not none of them.
+     *                                         // Use "names" to specify several attributes that have to match a single credential.
+     *    "restrictions":  Optional<wql query> - set of restrictions applying to requested credentials. (see below)
+     *    "non_revoked": {
+     *        "from": Optional<(u64)> Requested time represented as a total number of seconds from Unix Epoch, Optional
+     *        "to": Optional<(u64)>
+     *            //Requested time represented as a total number of seconds from Unix Epoch, Optional
+     *         }
+     *    }
+     *    Example requested_attrs -> "[{"name":"attrName","restrictions":["issuer_did":"did","schema_id":"id","schema_issuer_did":"did","schema_name":"name","schema_version":"1.1.1","cred_def_id":"id"}]]"
+     *    </span></pre>
+     * @param requestedPredicates predicate specifications prover must provide claim for
+     * <pre><span style="color: gray;font-style: italic;"> example :
+     *   { // set of requested predicates
+     *    "name": attribute name, (case insensitive and ignore spaces)
+     *    "p_type": predicate type (Currently ">=" only)
+     *    "p_value": int predicate value
+     *    "restrictions":  Optional<wql query> -  set of restrictions applying to requested credentials. (see below)
+     *    "non_revoked": Optional<{
+     *        "from": Optional<(u64)> Requested time represented as a total number of seconds from Unix Epoch, Optional
+     *        "to": Optional<(u64)> Requested time represented as a total number of seconds from Unix Epoch, Optional
+     *       }>
+     *    },
+     *   Example requested_predicates -> "[{"name":"attrName","p_type":"GE","p_value":9,"restrictions":["issuer_did":"did","schema_id":"id","schema_issuer_did":"did","schema_name":"name","schema_version":"1.1.1","cred_def_id":"id"}]]"
+     * </span></pre>
+     * @param revocationInterval Optional<<revocation_interval>>, interval applied to all requested attributes indicating when the claim must be valid (NOT revoked) // see below,
+     * <pre><span style="color: gray;font-style: italic;"> example :
+     *   If specified, prover must proof non-revocation
+     *                         // for date in this interval for each attribute
+     *                         // (can be overridden on attribute level)
+     *   from: Optional<u64> // timestamp of interval beginning
+     *   to: Optional<u64> // timestamp of interval beginning
+     *         // Requested time represented as a total number of seconds from Unix Epoch, Optional
+     *  # Examples config ->  "{}" | "{"to": 123} | "{"from": 100, "to": 123}"
+     * </span></pre>
+     * @return Proof Object
+     * @throws VcxException the vcx exception.
+     * <pre><span style="color: gray;font-style: italic;">
+     *   Example:
+     *
+     *   // Get Credential
+     *         String vcxConfigRecord = WalletApi.{@link com.evernym.sdk.vcx.wallet.WalletApi#getRecordWallet getRecordWallet}("vcxConfig", "defaultVcxConfig", "").get();
+     *         String vcxConfig = JsonPath.read(vcxConfigRecord,"$.value");
+     *
+     *         String proofAttributes = JsonPath.parse("[" +
+     *                 "  {" +
+     *                 "    names: ['name', 'last_name']," +
+     *                 "    restrictions: [{ issuer_did: " + JsonPath.read(vcxConfig, "$.institution_did") + " }]" +
+     *                 "  }," +
+     *                 "  {" +
+     *                 "    name: 'date'," +
+     *                 "    restrictions: { issuer_did: " + JsonPath.read(vcxConfig, "$.institution_did") + " }" +
+     *                 "  }," +
+     *                 "  {" +
+     *                 "    name: 'degree'," +
+     *                 "    restrictions: { 'attr::degree::value': 'maths' }" +
+     *                 "  }" +
+     *                 "]").jsonString();
+     *
+     *         String proofPredicates = JsonPath.parse("[" +
+     *                 "  {" +
+     *                 "    name: 'age'," +
+     *                 "    p_type: '>='," +
+     *                 "    p_value: 20," +
+     *                 "    restrictions: [{ issuer_did: " + JsonPath.read(vcxConfig, "$.institution_did") + " }]" +
+     *                 "  }" +
+     *                 "]").jsonString();
+     *
+     *         long curUnixTime = System.currentTimeMillis() / 1000L;
+     *         String revocationInterval = "{\"to\": " + curUnixTime + "}";
+     *
+     *   // Create a Proof object
+     *                 "proofAttributes: " + prettyJson(proofAttributes) + "\n" +
+     *                 "proofPredicates: " + prettyJson(proofPredicates) + "\n" +
+     *                 "revocationInterval: " + prettyJson(revocationInterval));
+     *         int proofHandle = ProofApi.{@link #proofCreate proofCreate}("proof_uuid",
+     *                 proofAttributes,
+     *                 proofPredicates,
+     *                 revocationInterval,
+     *                 "proof_from_alice").get();
+     *
+     *   // Request proof of degree from alice
+     *         ProofApi.{@link #proofSendRequest proofSendRequest}(proofHandle, connectionHandle).get();
+     *
+     *         String serializedProof = ProofApi.{@link #proofSerialize proofSerialize}(proofHandle).get();
+     *         String threadId = JsonPath.read(serializedProof,"$.data.verifier_sm.state.PresentationRequestSent.presentation_request.@id");
+     *   // addRecordWallet
+     *         WalletApi.{@link com.evernym.sdk.vcx.wallet.WalletApi#addRecordWallet addRecordWallet}("proof", threadId, serializedProof, "").get();
+     *   // Proof Release
+     *         ProofApi.{@link #proofRelease proofRelease}(proofHandle);
+     * </span></pre>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Proof Create Example</a>
+     *
+     */
     public static CompletableFuture<Integer> proofCreate(
             String sourceId,
             String requestedAttrs,
@@ -57,6 +168,16 @@ public class ProofApi extends VcxJava.API {
         }
     };
 
+    /**
+     * Sends a proof request to pairwise connection
+     *
+     * @param proofHandle Proof handle that was provided during creation. Used to access proof object.
+     * @param connectionHandle Connection handle that identifies pairwise connection.
+     * @return completable future
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     * @see "Refer proofCreate example for credential demo"
+     * @see #proofCreate
+     */
     public static CompletableFuture<Integer> proofSendRequest(
             int proofHandle,
             int connectionHandle
@@ -82,7 +203,13 @@ public class ProofApi extends VcxJava.API {
             future.complete(msg);
         }
     };
-
+    /**
+     * Get the proof request message that can be sent to the specified connection
+     *
+     * @param proofHandle Proof handle that was provided during creation. Used to access proof object
+     * @return completable future
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     */
     public static CompletableFuture<String> proofGetRequestMsg(
             int proofHandle
     ) throws VcxException {
@@ -107,6 +234,7 @@ public class ProofApi extends VcxJava.API {
         }
     };
 
+    @Deprecated
     public static CompletableFuture<GetProofResult> getProof(
             int proofHandle,
             int connectionHandle
@@ -123,6 +251,16 @@ public class ProofApi extends VcxJava.API {
         return future;
     }
 
+    /**
+     * Get proof message<br>
+     * This replaces {@link #getProof getProof}.
+     *
+     * @param proofHandle Proof handle that was provided during creation. Used to identify proof object.
+     * @return completable future
+     * @throws VcxException the vcx exception.
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Proof Create Example</a>
+     *
+     */
     public static CompletableFuture<GetProofResult> getProofMsg(
             int proofHandle
     ) throws VcxException {
@@ -139,6 +277,14 @@ public class ProofApi extends VcxJava.API {
 
 
     // vcx_proof_accepted
+    /**
+     * proof Accept<br>
+     *
+     * @param proofHandle Proof handle that was provided during creation. Used to identify proof object.
+     * @return completable future
+     * @throws VcxException the vcx exception.
+     *
+     */
     public static CompletableFuture<Integer> proofAccepted(
             int proofHandle,
             String responseData
@@ -164,6 +310,35 @@ public class ProofApi extends VcxJava.API {
         }
     };
 
+    /**
+     * Query the agency for the received messages <br>
+     * Checks for any messages changing state in the object and updates the state attribute.<br>
+     *
+     * @param proofHandle Proof handle that was provided during creation. Used to access proof object.
+     * @return provides most current state of the credential and error status of request
+     * <pre><span style="color: gray;font-style: italic;"> States:
+     *  1 - Initialized
+     *  2 - Request Sent
+     *  3 - Proof Received
+     *  4 - Accepted </span></pre>
+     * @throws VcxException the vcx exception.
+     * <pre><span style="color: gray;font-style: italic;">
+     *   Example:
+     *     // get proof
+     *         String threadId = JsonPath.read(payloadMessage, "$.~thread.thid");
+     *         String proofRecord = WalletApi..{@link com.evernym.sdk.vcx.wallet.WalletApi#getRecordWallet getRecordWallet}("proof", threadId, "").get();
+     *         String serializedProof = JsonPath.read(proofRecord, "$.value");
+     *         serializedProof = JsonPath.parse(serializedProof)
+     *                 .set("$.data.verifier_sm.state.PresentationRequestSent.connection_handle", Integer.toUnsignedLong(connectionHandle))
+     *                 .jsonString();
+     *     // Proof Deserialize
+     *         int proofHandle = ProofApi.{@link #proofDeserialize proofDeserialize}(serializedProof).get();
+     *     // Proof Update State
+     *         int proofState = ProofApi.{@link #proofUpdateState proofUpdateState}(proofHandle).get();
+     * </span></pre>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Proof update state Example</a>
+     *
+     */
     public static CompletableFuture<Integer> proofUpdateState(
             int proofHandle
     ) throws VcxException {
@@ -177,7 +352,18 @@ public class ProofApi extends VcxJava.API {
 
         return future;
     }
-
+    /**
+     * Update the state of the proof based on the given message.
+     *
+     * @param proofHandle Proof handle that was provided during creation. Used to access proof object
+     * @return provides most current state of the credential and error status of request
+     * <pre><span style="color: gray;font-style: italic;"> States:
+     *  1 - Initialized
+     *  2 - Request Sent
+     *  3 - Proof Received
+     *  4 - Accepted </span></pre>
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     */
     public static CompletableFuture<Integer> proofUpdateStateWithMessage(
             int proofHandle,
             String message
@@ -202,7 +388,18 @@ public class ProofApi extends VcxJava.API {
             future.complete(result);
         }
     };
-
+    /**
+     * Get the current state of the proof object
+     *
+     * @param proofHandle Proof handle that was provided during creation. Used to access proof object
+     * @return provides most current state of the credential and error status of request
+     * <pre><span style="color: gray;font-style: italic;"> States:
+     *  1 - Initialized
+     *  2 - Request Sent
+     *  3 - Proof Received
+     *  4 - Accepted </span></pre>
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     */
     public static CompletableFuture<Integer> proofGetState(
             int proofHandle
     ) throws VcxException {
@@ -225,7 +422,15 @@ public class ProofApi extends VcxJava.API {
             future.complete(proofState);
         }
     };
-
+    /**
+     * Takes the proof object and returns a json string of all its attributes
+     *
+     * @param proofHandle Proof handle that was provided during creation. Used to access proof object.
+     * @return completable future
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     * @see "Refer proofCreate example for credential demo"
+     * @see #proofCreate
+     */
     public static CompletableFuture<String> proofSerialize(
             int proofHandle
     ) throws VcxException {
@@ -250,6 +455,15 @@ public class ProofApi extends VcxJava.API {
         }
     };
 
+    /**
+     * Takes a json string representing a proof object and recreates an object matching the json
+     *
+     * @param serializedProof json string representing a proof object
+     * @return Success
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     * @see "Refer proofCreate example for credential demo"
+     * @see #proofCreate
+     */
     public static CompletableFuture<Integer> proofDeserialize(
             String serializedProof
     ) throws VcxException {
@@ -264,6 +478,15 @@ public class ProofApi extends VcxJava.API {
         return future;
     }
 
+    /**
+     * Releases the proof object by de-allocating memory
+     *
+     * @param proofHandle Proof handle that was provided during creation. Used to access proof object.
+     * @return Success
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     * @see "Refer proofCreate example for credential demo"
+     * @see #proofCreate
+     */
     public static int proofRelease(int proofHandle) throws VcxException {
         ParamGuard.notNull(proofHandle, "proofHandle");
         logger.debug("proofRelease() called with: proofHandle = [" + proofHandle + "]");

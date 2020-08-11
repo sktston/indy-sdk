@@ -11,7 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
-
+/**
+ * <h1>VCX Schema API.</h1>
+ * VCX Schema APIs <br>
+ * Javadoc written by SKTelecom (The original is vcx and python wrapper documents)
+ *
+ * @author  JJ
+ * @version 1.0
+ * @since   2020-06-31
+ */
 public class SchemaApi extends VcxJava.API {
     private static final Logger logger = LoggerFactory.getLogger("SchemaApi");
     private static Callback schemaCreateCB = new Callback() {
@@ -27,6 +35,43 @@ public class SchemaApi extends VcxJava.API {
         }
     };
 
+    /**
+     * <p>Create a new Schema object and publish correspondent record on the ledger.</p>
+     *
+     * @param sourceId Enterprise's personal identification for the user.
+     * @param schemaName version of schema.
+     * @param version version of schema.
+     * @param data list of attributes that will make up the schema (the number of attributes should be less or equal than 125).
+     * @param paymentHandle future use (currently uses any address in the wallet).
+     * <br><pre>Example schema_data -> "["attr1", "attr2", "attr3"]".</pre>
+     * <br>
+     * @return  schema object, written to ledger.
+     * <pre><span style="color: gray;font-style: italic;">
+     *  Example:
+     *  // Schema Create
+     *         String schemaData = JsonPath.parse("{" +
+     *                 "  schema_name: 'degree_schema'," +
+     *                 "  schema_version: '" + version + "'," +
+     *                 "  attributes: ['name', 'last_name', 'date', 'degree', 'age']" +
+     *                 "}").jsonString();
+     *         int schemaHandle = SchemaApi.{@link #schemaCreate schemaCreate}("schema_uuid", // Schema Create
+     *                 JsonPath.read(schemaData, "$.schema_name"),
+     *                 JsonPath.read(schemaData, "$.schema_version"),
+     *                 JsonPath.parse((List)JsonPath.read(schemaData, "$.attributes")).jsonString(),
+     *                 0).get();
+     *  // Get Schema ID
+     *         String schemaId = SchemaApi.{@link #schemaGetSchemaId schemaGetSchemaId}(schemaHandle).get();
+     *  // Schema Serialize
+     *         String schema = SchemaApi.{@link #schemaSerialize schemaSerialize}(schemaHandle).get();
+     *  // Add Record Wallet
+     *         WalletApi.{@link com.evernym.sdk.vcx.wallet.WalletApi#addRecordWallet addRecordWallet}("schema", "defaultSchema", schema).get();
+     *  // Schema Release
+     *         SchemaApi.{@link #schemaRelease schemaRelease}(schemaHandle);
+     *   }
+     * </span></pre>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/53bda51f7fff5d5379faa680fac10d96253b1302/src/main/java/webhook/faber/GlobalService.java" target="_blank">VCX JAVA Demo - Schema Create Example</a>
+     * @since 1.0
+     */
     public static CompletableFuture<Integer> schemaCreate(String sourceId,
                                                           String schemaName,
                                                           String version,
@@ -69,7 +114,36 @@ public class SchemaApi extends VcxJava.API {
             future.complete(result);
         }
     };
-
+    /**
+     * <p>Serialize the object for storage.</p>
+     * <br> Takes the schema object and returns a json string of all its attributes
+     * <br> See {@link #schemaCreate(String, String, String, String, int)} example for reference.
+     * @param schemaHandle Schema handle that was provided during creation. Used to access schema object.
+     * <br>
+     * @return  serialized object
+     * <br><pre>
+     *         Serialized Schema:
+     *         {
+     *          "version": "1.0",
+     *          "data": {
+     *              "data": [
+     *                  "name",
+     *                  "last_name",
+     *                  "date",
+     *                  "degree",
+     *                  "age"
+     *                  ],
+     *              "version": "59.4.40",
+     *              "schema_id": "Th7MpTaRZVRYnPiabds81Y:2:degree_schema:59.4.40",
+     *              "name": "degree_schema",
+     *              "source_id": "schema_uuid",
+     *              "state": 1
+     *              }
+     *          }
+     * </pre>
+     * @see "Refer schemaCreate example for credential demo"
+     * @see #schemaCreate
+     */
     public static CompletableFuture<String> schemaSerialize(int schemaHandle) throws VcxException {
         ParamGuard.notNull(schemaHandle, "schemaHandle");
         logger.debug("schemaSerialize() called with: schemaHandle = [" + schemaHandle + "]");
@@ -101,7 +175,36 @@ public class SchemaApi extends VcxJava.API {
             future.complete(result);
         }
     };
-
+    /**
+     * <p> Create the object from a previously serialized object.</p>
+     * <br> Takes a json string representing a schema object and recreates an object matching the json.
+     * <br> Attributes are provided by a previous call to the serialize function.
+     * <br> See {@link #schemaCreate(String, String, String, String, int)} example for reference.
+     * @param schemaData json string representing a schema object.
+     * <br>
+     * @return  A re-instantiated object
+     * <br><pre>
+     *         Serialized Schema:
+     *         {
+     *          "version": "1.0",
+     *          "data": {
+     *              "data": [
+     *                  "name",
+     *                  "last_name",
+     *                  "date",
+     *                  "degree",
+     *                  "age"
+     *                  ],
+     *              "version": "59.4.40",
+     *              "schema_id": "Th7MpTaRZVRYnPiabds81Y:2:degree_schema:59.4.40",
+     *              "name": "degree_schema",
+     *              "source_id": "schema_uuid",
+     *              "state": 1
+     *              }
+     *          }
+     * </pre>
+     * @since 1.0
+     */
     public static CompletableFuture<Integer> schemaDeserialize(String schemaData) throws VcxException {
         ParamGuard.notNull(schemaData, "schemaData");
         logger.debug("schemaDeserialize() called with: schemaData = [" + schemaData + "]");
@@ -126,7 +229,15 @@ public class SchemaApi extends VcxJava.API {
             future.complete(schemaAttributes);
         }
     };
-
+    /**
+     * <p> Retrieves all of the data associated with a schema on the ledger.</p>
+     * <br>
+     * @param sourceId Enterprise's personal identification for the user.
+     * @param schemaId id of schema given during the creation of the schema.
+     * <br>
+     * @return Completable future
+     * @since 1.0
+     */
     public static CompletableFuture<String> schemaGetAttributes( String sourceId, String schemaId) throws VcxException {
         ParamGuard.notNullOrWhiteSpace(sourceId, "sourceId");
         logger.debug("schemaGetAttributes() called with: sourceId = [" + sourceId + "], schemaHandle = [" + schemaId + "]");
@@ -146,7 +257,15 @@ public class SchemaApi extends VcxJava.API {
             future.complete(schemaId);
         }
     };
-
+    /**
+     * Retrieves schema's id
+     *
+     * @param schemaHandle Schema handle that was provided during creation. Used to access proof object
+     * @return completable future
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     * @see "Refer schemaCreate example for credential demo"
+     * @see #schemaCreate
+     */
     public static CompletableFuture<String> schemaGetSchemaId( int schemaHandle) throws VcxException {
         ParamGuard.notNull(schemaHandle, "SchemaHandle");
         logger.debug("schemaGetSchemaId() called with: schemaHandle = [" + schemaHandle + "]");
@@ -156,7 +275,15 @@ public class SchemaApi extends VcxJava.API {
         checkResult(result);
         return future;
     }
-
+    /**
+     * Releases the schema object by de-allocating memory
+     *
+     * @param schemaHandle Schema handle that was provided during creation. Used to access schema object
+     * @return Success
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     * @see "Refer schemaCreate example for credential demo"
+     * @see #schemaCreate
+     */
     public static int schemaRelease(
             int schemaHandle
     ) throws VcxException {
@@ -179,7 +306,19 @@ public class SchemaApi extends VcxJava.API {
             future.complete(result);
         }
     };
-
+    /**
+     * Create a new Schema object that will be published by Endorser later.<br>
+     * Note that Schema can't be used for credential issuing until it will be published on the ledger.
+     *
+     * @param sourceId Enterprise's personal identification for the user.
+     * @param schemaName version of schema.
+     * @param version version of schema.
+     * @param data list of attributes that will make up the schema (the number of attributes should be less or equal than 125).
+     * @param endorser DID of the Endorser that will submit the transaction.
+     * @return completable future
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     * @since 1.0
+     */
     public static CompletableFuture<SchemaPrepareForEndorserResult> schemaPrepareForEndorser(String sourceId,
                                                                                              String schemaName,
                                                                                              String version,
@@ -217,7 +356,14 @@ public class SchemaApi extends VcxJava.API {
 			future.complete(result);
 		}
 	};
-
+    /**
+     * Checks if schema is published on the Ledger and updates the  state<br>
+     *
+     * @param schemaHandle Schema handle that was provided during creation. Used to access schema object
+     * @return completable future
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     * @since 1.0
+     */
 	public static CompletableFuture<Integer> schemaUpdateState(int schemaHandle) throws VcxException {
 		logger.debug("vcxSchemaUpdateState() called with: schemaHandle = [" + schemaHandle + "]");
 		CompletableFuture<Integer> future = new CompletableFuture<>();
@@ -231,7 +377,14 @@ public class SchemaApi extends VcxJava.API {
 		checkResult(result);
 		return future;
 	}
-
+    /**
+     * Get the current state of the schema object<br>
+     *
+     * @param schemaHandle Schema handle that was provided during creation. Used to access schema object
+     * @return completable future
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK.
+     * @since 1.0
+     */
 	public static CompletableFuture<Integer> schemaGetState(int schemaHandle) throws VcxException {
 		logger.debug("schemaGetState() called with: schemaHandle = [" + schemaHandle + "]");
 		CompletableFuture<Integer> future = new CompletableFuture<>();
