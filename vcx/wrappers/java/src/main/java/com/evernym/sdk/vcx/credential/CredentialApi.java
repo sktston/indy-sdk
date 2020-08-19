@@ -43,7 +43,7 @@ public class CredentialApi extends VcxJava.API {
      * @param connectionHandle connection to query for credential offer
      * @param msgId msgid that contains the credential offer
      * @return A created credential
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK
      *
      */
     public static CompletableFuture<GetCredentialCreateMsgidResult> credentialCreateWithMsgid(
@@ -122,7 +122,7 @@ public class CredentialApi extends VcxJava.API {
      * @param theirPwDid Use Connection api (vcx_connection_get_their_pw_did) with specified connection_handle to retrieve theri pw_did
      * @param paymentHandle currently unused
      * @return A created credential
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK
      *
      */
     public static CompletableFuture<String> credentialGetRequestMsg(
@@ -200,7 +200,7 @@ public class CredentialApi extends VcxJava.API {
      *
      * @param serializedCredential json string representing a credential object.
      * @return completable future
-     * @throws VcxException the vcx exception.
+     * @throws VcxException Thrown if an error occurs when calling the underlying SDK
      * <pre><span style="color: gray;font-style: italic;">
      *   Example:
      *   // Accept credential
@@ -222,7 +222,7 @@ public class CredentialApi extends VcxJava.API {
      *   // Credential Release
      *         CredentialApi.{@link #credentialRelease credentialRelease}(credentialHandle);
      * </span></pre>
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/aae2f4c37051d00d48360078ba041751201ec7b0/src/main/java/webhook/alice/GlobalService.java" target="_blank">VCX JAVA Demo - Credential offer Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/alice/GlobalService.java" target="_blank">VCX JAVA Demo - Credential offer Example</a>
      *
      */
     public static CompletableFuture<Integer> credentialDeserialize(

@@ -45,7 +45,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *
 	 * @param sourceId Institution's unique ID for the connection
 	 * @return completable future
-	 * @throws VcxException the vcx exception.
+	 * @throws VcxException thrown if an error occurs when calling the underlying SDK
 	 * <pre><span style="color: gray;font-style: italic;"> Example:
 	 *
 	 *   // Create a connection to alice and return the invite details
@@ -102,7 +102,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *    2 - Request Sent
 	 *    3 - Offer Received
 	 *    4 - Accepted </span></pre>
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 *   <pre><span style="color: gray;font-style: italic;"> Example:
 	 *
 	 *   //connection request - At Inviter: after receiving invitation from Invitee
@@ -143,7 +143,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *    2 - Request Sent
 	 *    3 - Offer Received
 	 *    4 - Accepted </span></pre>
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	public static CompletableFuture<Integer> vcxConnectionUpdateStateWithMessage(int connectionHandle, String message) throws VcxException {
 		logger.debug("vcxConnectionUpdateState() called with: connectionHandle = [" + connectionHandle + "]");
@@ -195,7 +195,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *        "routingKeys": ["8HH5gYEeNc3z7PYXmd54d4x6qAfCNrqQqEB3nS7Zfu7K"]
 	 *        } </span></pre>
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/alice/GlobalService.java" target="_blank">VCX JAVA Demo - Connection with Invite Example</a>
 	 */
 	public static CompletableFuture<Integer> vcxCreateConnectionWithInvite(String invitationId, String inviteDetails) throws VcxException {
@@ -237,7 +237,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param connectionHandle the connection handle
 	 * @param connectionType   the connection type
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	@Deprecated
 	public static CompletableFuture<String> vcxAcceptInvitation(int connectionHandle, String connectionType) throws VcxException {
@@ -252,7 +252,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param connectionHandle the connection handle
 	 * @param connectionType   the connection type
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 * @see "Refer to vcxConnectionCreate example for vcxConnectionConnect demo"
 	 * @see #vcxConnectionCreate
 	 */
@@ -289,7 +289,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param connectionHandle         the connection handle
 	 * @param redirectConnectionHandle the redirect connection handle
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	public static CompletableFuture<Integer> vcxConnectionRedirect(int connectionHandle, int redirectConnectionHandle) throws VcxException {
 		ParamGuard.notNull(connectionHandle, "connectionHandle");
@@ -324,7 +324,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *
 	 * @param connectionHandle the connection handle
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	public static CompletableFuture<String> vcxConnectionGetRedirectDetails(int connectionHandle) throws VcxException {
 		ParamGuard.notNull(connectionHandle, "connectionHandle");
@@ -363,7 +363,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *
 	 * @param connectionHandle the connection handle
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 * @see "Refer to vcxConnectionCreate example for connectionSerialize demo"
 	 * @see #vcxConnectionCreate
 	 */
@@ -403,7 +403,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *
 	 * @param connectionData json string representing a connection object. Is an output of `serialize` function.
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 * <pre><span style="color: gray;font-style: italic;"> Example:
 	 *
 	 *   // Get the message from "mediator agency" using notification information
@@ -453,7 +453,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *
 	 * @param connectionHandle the connection handle
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	public static CompletableFuture<Integer> deleteConnection(int connectionHandle) throws VcxException {
 		logger.debug("deleteConnection() called with: connectionHandle = [" + connectionHandle + "]");
@@ -481,7 +481,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param connectionHandle the connection handle
 	 * @param abbreviated      the abbreviated
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 * @see "Refer to vcxConnectionCreate example for vcxConnectionConnect demo"
 	 * @see #vcxConnectionCreate
 	 */
@@ -500,7 +500,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *
 	 * @param handle the handle
 	 * @return Success
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 * @see "Refer to vcxConnectionCreate example for vcxConnectionConnect demo"
 	 * @see #vcxConnectionCreate
 	 */
@@ -528,7 +528,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *
 	 * @param connnectionHandle the connnection handle
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	public static CompletableFuture<Integer> connectionGetState(int connnectionHandle) throws VcxException {
 		logger.debug("connectionGetState() called with: connnectionHandle = [" + connnectionHandle + "]");
@@ -556,7 +556,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param connectionHandle the connection handle
 	 * @param comment          the comment
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	public static CompletableFuture<Void> connectionSendPing(
 			int connectionHandle,
@@ -579,7 +579,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param query            the query
 	 * @param comment          the comment
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	public static CompletableFuture<Void> connectionSendDiscoveryFeatures(
 			int connectionHandle,
@@ -613,7 +613,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param message            the message
 	 * @param sendMessageOptions the send message options
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	public static CompletableFuture<String> connectionSendMessage(int connectionHandle, String message, String sendMessageOptions) throws VcxException {
         logger.debug("connectionSendMessage() called with: connectionHandle = [" + connectionHandle + "], message = [****], sendMessageOptions = [" + sendMessageOptions + "]");
@@ -648,7 +648,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param data             the data
 	 * @param dataLength       the data length
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	public static CompletableFuture<byte[]> connectionSignData(int connectionHandle, byte[] data, int dataLength) throws VcxException {
 
@@ -684,7 +684,7 @@ public class ConnectionApi extends VcxJava.API {
 	 * @param signature        the signature
 	 * @param signatureLength  the signature length
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	public static CompletableFuture<Boolean> connectionVerifySignature(int connectionHandle, byte[] data, int dataLength, byte[] signature, int signatureLength) throws VcxException {
 
@@ -748,7 +748,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *
 	 * @param connectionHandle the connection handle
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	public static CompletableFuture<String> connectionGetTheirPwDid(int connectionHandle) throws VcxException {
 
@@ -775,7 +775,7 @@ public class ConnectionApi extends VcxJava.API {
 	 *
 	 * @param connectionHandle the connection handle
 	 * @return completable future
-	 * @throws VcxException the vcx exception
+	 * @throws VcxException Thrown if an error occurs when calling the underlying SDK
 	 */
 	public static CompletableFuture<String> connectionInfo(int connectionHandle) throws VcxException {
 		logger.debug("connectionInfo() called with: connectionHandle = [" + connectionHandle + "]");
