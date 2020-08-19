@@ -89,7 +89,7 @@ public class CredentialApi extends VcxJava.API {
      * @param connectionHandle Connection handle that identifies pairwise connection
      * @param paymentHandle currently unused
      * @return A created credential
-     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/a25a25d652aff2eaea0d3075ac17e1e3f35d621b/src/main/java/webhook/alice/GlobalService.java" target="_blank">VCX JAVA Demo - Credential offer Example</a>
+     * @see <a href = "https://github.com/sktston/vcx-demo-java/blob/master/src/main/java/webhook/alice/GlobalService.java" target="_blank">VCX JAVA Demo - Credential offer Example</a>
      *
      */
     public static CompletableFuture<String> credentialSendRequest(
